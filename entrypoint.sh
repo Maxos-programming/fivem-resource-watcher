@@ -68,7 +68,10 @@ for changed in $DIFF; do
 done
 unset IFS
 
+resources_to_restart=($(echo "${resources_to_restart[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+
 echo "rss: ${resources_to_restart}"
+
 
 if [ -z "$resources_to_restart" ]; then
     echo "Nothing to restart"
