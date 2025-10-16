@@ -63,11 +63,12 @@ for changed in $DIFF; do
     if beginswith "${RESOURCES_FOLDER}" "${changed}"; then
         filtered=${changed##*]/} # Remove subfolders
         filtered=${filtered%%/*} # Remove filename and get the folder which corresponds to the resource name
-        echo "filtered: ${filtered}"
         resources_to_restart="$(append_if_not_exists "$filtered" "$resources_to_restart")"
     fi
 done
 unset IFS
+
+echo "rss: ${resources_to_restart}"
 
 if [ -z "$resources_to_restart" ]; then
     echo "Nothing to restart"
