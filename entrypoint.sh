@@ -42,7 +42,7 @@ for changed in $DIFF; do
     if beginswith "${RESOURCES_FOLDER}" "${changed}"; then
         filtered=${changed##*]/} # Remove subfolders
         filtered=${filtered%%/*} # Remove filename and get the folder which corresponds to the resource name
-        resources_to_restart_temp=("${resources_to_restart[@]}" $filtered) # push element
+        resources_to_restart_temp=("${resources_to_restart_temp[@]}" $filtered) # push element
 
     fi
 done
