@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/sh -l
 
 beginswith() { case $2 in "$1"*) true ;; *) false ;; esac }
 
