@@ -2,27 +2,6 @@
 
 beginswith() { case $2 in "$1"*) true ;; *) false ;; esac }
 
-exists_in_array() {
-  local element="$1"
-  local array_str="$2"
-  for i in $array_str; do
-    if [ "$i" = "$element" ]; then
-      return 0
-    fi
-  done
-  return 1
-}
-
-append_if_not_exists() {
-  local element="$1"
-  local array_str="$2"
-  if exists_in_array "$element" "$array_str"; then
-    echo "$array_str"
-  else
-    echo "$array_str $element"
-  fi
-}
-
 icecon_command() {
     icecon --command "$1" "${SERVER_IP}:${SERVER_PORT}" "${RCON_PASSWORD}"
 }
@@ -55,7 +34,7 @@ else
     echo "Diff between ${GITHUB_EVENT_BEFORE} and ${GITHUB_SHA}"
 fi
 
-resources_to_restart=
+resources_to_restart_temp=
 
 IFS=$'\n'
 for changed in $DIFF; do
@@ -63,12 +42,15 @@ for changed in $DIFF; do
     if beginswith "${RESOURCES_FOLDER}" "${changed}"; then
         filtered=${changed##*]/} # Remove subfolders
         filtered=${filtered%%/*} # Remove filename and get the folder which corresponds to the resource name
-        resources_to_restart="$(append_if_not_exists "$filtered" "$resources_to_restart")"
+        resources_to_restart_temp=("${resources_to_restart[@]}" $filtered) # push element
+
     fi
 done
 unset IFS
 
-resources_to_restart=($(echo "${resources_to_restart[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+declare -A resources_to_restart
+for k in $resources_to_restart_temp ; do resources_to_restart[$k]=1 ; done
+
 
 echo "rss: ${resources_to_restart}"
 
