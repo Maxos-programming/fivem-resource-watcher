@@ -1,4 +1,4 @@
-#!/bin/sh -l
+#!/bin/bash -l
 
 beginswith() { case $2 in "$1"*) true ;; *) false ;; esac }
 
@@ -34,7 +34,8 @@ else
     echo "Diff between ${GITHUB_EVENT_BEFORE} and ${GITHUB_SHA}"
 fi
 
-resources_to_restart_temp=
+# initialize as a bash array
+resources_to_restart_temp=()
 
 IFS=$'\n'
 for changed in $DIFF; do
@@ -42,20 +43,20 @@ for changed in $DIFF; do
     if beginswith "${RESOURCES_FOLDER}" "${changed}"; then
         filtered=${changed##*]/} # Remove subfolders
         filtered=${filtered%%/*} # Remove filename and get the folder which corresponds to the resource name
-        resources_to_restart_temp=("${resources_to_restart_temp[@]}" $filtered) # push element
-
+        # append properly to the bash array
+        resources_to_restart_temp+=("$filtered") # push element
     fi
 done
 unset IFS
 
 declare -A resources_to_restart
-for k in $resources_to_restart_temp ; do resources_to_restart[$k]=1 ; done
+for k in "${resources_to_restart_temp[@]}"; do resources_to_restart[$k]=1 ; done
 
 
-echo "rss: ${resources_to_restart}"
+echo "rss: ${!resources_to_restart[@]}"
 
 
-if [ -z "$resources_to_restart" ]; then
+if [ "${#resources_to_restart[@]}" -eq 0 ]; then
     echo "Nothing to restart"
 else
     player_count=$(get_player_count)
@@ -64,7 +65,7 @@ else
         icecon_command "quit"
     elif [ "$RESTART_INDIVIDUAL_RESOURCES" = true ]; then
         echo "Will restart individual resources"
-        for resource in $resources_to_restart; do
+        for resource in "${!resources_to_restart[@]}"; do
             if exists_in_array "${resource}" "${IGNORED_RESOURCES}"; then
                 echo "Ignoring restart of the resource ${resource}"
             else
