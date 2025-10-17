@@ -31,7 +31,10 @@ inputs:
     description: "List of resources that you want to ignore separated by spaces and not restart when changes are made to them"
     required: false
     default: ""
-    type: string
+  resourcesneedrestart:
+    description: "List of resources that need a Server Restart else crash the Server"
+    required: false
+    default: ""
 
 runs:
   using: "docker"
@@ -44,3 +47,4 @@ runs:
     - ${{ inputs.resourcesFolder }}
     - ${{ inputs.restartServerWhen0Players }}
     - ${{ inputs.resourcesToIgnore }}
+    - ${{ inputs.resourcesneedrestart }}
