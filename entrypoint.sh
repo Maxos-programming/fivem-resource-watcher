@@ -87,7 +87,7 @@ else
         for resource in ${resources_to_restart_list}; do
             if exists_in_list "${resource}" "${IGNORED_RESOURCES}"; then
                 echo "Ignoring restart of the resource ${resource}"
-            else if exists_in_list "${resource}" "${RESOURCES_NEED_RESTART}"; then
+            elif exists_in_list "${resource}" "${RESOURCES_NEED_RESTART}"; then
                 icecon_command "quit"
             else
                 echo "Restarting ${resource}"
