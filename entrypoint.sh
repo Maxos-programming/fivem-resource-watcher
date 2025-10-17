@@ -88,7 +88,9 @@ else
             if exists_in_list "${resource}" "${IGNORED_RESOURCES}"; then
                 echo "Ignoring restart of the resource ${resource}"
             elif exists_in_list "${resource}" "${RESOURCES_NEED_RESTART}"; then
+                echo "Restart Server because of ${resource}"
                 icecon_command "quit"
+                break
             else
                 echo "Restarting ${resource}"
                 icecon_command "ensure ${resource}"
