@@ -33,6 +33,7 @@ RCON_PASSWORD=$4
 RESOURCES_FOLDER=$5
 RESTART_SERVER_WHEN_0_PLAYERS=$6
 IGNORED_RESOURCES=$7
+RESOURCES_NEED_RESTART=$8
 
 git config --global --add safe.directory /github/workspace
 
@@ -86,6 +87,8 @@ else
         for resource in ${resources_to_restart_list}; do
             if exists_in_list "${resource}" "${IGNORED_RESOURCES}"; then
                 echo "Ignoring restart of the resource ${resource}"
+            else if exists_in_list "${resource}" "${RESOURCES_NEED_RESTART}"; then
+                icecon_command "quit"
             else
                 echo "Restarting ${resource}"
                 icecon_command "ensure ${resource}"
