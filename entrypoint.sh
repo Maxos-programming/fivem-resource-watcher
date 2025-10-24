@@ -84,6 +84,7 @@ else
         icecon_command "quit"
     elif [ "${RESTART_INDIVIDUAL_RESOURCES}" = true ]; then
         echo "Will restart individual resources"
+        icecon_command "refresh"
         for resource in ${resources_to_restart_list}; do
             if exists_in_list "${resource}" "${IGNORED_RESOURCES}"; then
                 echo "Ignoring restart of the resource ${resource}"
