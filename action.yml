@@ -1,5 +1,8 @@
 name: "FiveM Resource Watcher"
 description: "Watches for changed resources and restarts them"
+branding:
+  icon: 'box'
+  color: 'orange'
 inputs:
   restartIndividualResources:
     description: "Restart resources individually or restart the whole server"
