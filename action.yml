@@ -1,4 +1,5 @@
 name: "FiveM Resource Watcher"
+icon: box
 description: "Watches for changed resources and restarts them"
 inputs:
   restartIndividualResources:
